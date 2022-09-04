@@ -30,6 +30,4 @@ app.get("/", function (req, res) {
   });
 });
 
-server.listen(3001, () => {
-  console.log("Server is started");
-});
+server.listen(process.env.PORT || 3000);
