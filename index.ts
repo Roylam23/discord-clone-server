@@ -16,15 +16,17 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
-  socket.on("join_room", (data) => {
-    console.log(socket.id, "join room", data);
-    socket.join(data);
-  });
-  socket.on("send_message", (data) => {
-    console.log(data);
-    socket.to(data.room).emit("receive_message", data);
+app.get("/", function (req, res) {
+  io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`);
+    socket.on("join_room", (data) => {
+      console.log(socket.id, "join room", data);
+      socket.join(data);
+    });
+    socket.on("send_message", (data) => {
+      console.log(data);
+      socket.to(data.room).emit("receive_message", data);
+    });
   });
 });
 
