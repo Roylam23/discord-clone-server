@@ -19,8 +19,12 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
   socket.on("join_room", (data) => {
-    // console.log(socket.id, "join room", data);
     socket.join(data);
+  });
+
+  socket.on("leave_room", (data) => {
+    socket.leave(data);
+    console.log("User", socket.id, "leave room", data);
   });
   socket.on("send_message", (data) => {
     let date_ob = new Date();
@@ -49,6 +53,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 3001, () => {
   console.log("Server started");
 });
