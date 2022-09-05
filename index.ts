@@ -20,6 +20,7 @@ io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
   socket.on("join_room", (data) => {
     socket.join(data);
+    socket.emit("return_username", socket.id);
   });
 
   socket.on("leave_room", (data) => {
@@ -44,12 +45,19 @@ io.on("connection", (socket) => {
 
     // current minutes
     let minutes = date_ob.getMinutes();
-
+    const str_minutes = minutes < 10 ? `0${minutes}` : minutes;
     // current seconds
     let seconds = date_ob.getSeconds();
-    socket
-      .to(data.room)
-      .emit("receive_message", { data: data, time: hours + ":" + minutes });
+    socket.to(data.room).emit("receive_message", {
+      data: data,
+      time: hours + ":" + str_minutes,
+      user: socket.id,
+    });
+    socket.emit("receive_message", {
+      data: data,
+      time: hours + ":" + str_minutes,
+      user: socket.id,
+    });
   });
 });
 
